@@ -28,10 +28,9 @@ int main(int argc, char *argv[]) {
 
 void int_swap(void *a, int i, int j) {
   int * int_a = (int *) a;
-  int x = int_a[i];
-  int y = int_a[j];
-  int_a[i] = y;
-  int_a[j] = x;
+  int_a[i] = int_a[i] + int_a[j];
+  int_a[j] = int_a[i] - int_a[j];
+  int_a[i] = int_a[i] - int_a[j];
 }
 
 int int_compare(void *a, int i, int j) {
