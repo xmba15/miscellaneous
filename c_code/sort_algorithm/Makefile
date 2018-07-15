@@ -8,7 +8,8 @@ SRC = main.c insertion_sort.c comparator.c
 ODIR=obj
 OBJ = $(patsubst %.c, $(ODIR)/%.o, $(SRC))
 
-all: myprogram
+EXECUTABLE = sorting_algorithm
+all: $(EXECUTABLE)
 
 $(ODIR)/%.o: $(SRCDIR)/%.c
 	@if [ ! -d $(ODIR) ]; then \
@@ -16,10 +17,10 @@ $(ODIR)/%.o: $(SRCDIR)/%.c
 	fi
 	$(CC) -o $@ -c $< $(CFLAGS)
 
-myprogram: $(OBJ)
+$(EXECUTABLE): $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 .PHONY: clean
 
 clean:
-	rm -rf $(ODIR) myprogram
+	rm -rf $(ODIR) $(EXECUTABLE)
