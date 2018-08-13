@@ -12,7 +12,6 @@ class Sigmoid(object):
 
     def forward(self, x):
         out = functions.sigmoid(x)
-        # print (out.shape)
         self.out = out
         return out
 
