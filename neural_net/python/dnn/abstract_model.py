@@ -13,7 +13,7 @@ class AbstractModel(object):
     def __init__(self, *args, **kwargs):
         self.params = {}
         self.layers = OrderedDict()
-        self.lastLayer = None
+        self.last_layer = None
 
     def load_weights(self, weight_path, weight_file):
         """
@@ -39,7 +39,7 @@ class AbstractModel(object):
 
     def loss(self, X, y):
         y_predict = self.predict(X)
-        return self.lastLayer.forward(y_predict, y)
+        return self.last_layer.forward(y_predict, y)
 
     def accuracy(self, X, y):
         y_predict = self.predict(X)
@@ -53,7 +53,7 @@ class AbstractModel(object):
         self.loss(X, y)
 
         dout = 1
-        dout = self.lastLayer.backward(dout)
+        dout = self.last_layer.backward(dout)
 
         layers = list(self.layers.values())
         layers.reverse()

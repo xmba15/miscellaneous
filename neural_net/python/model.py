@@ -27,7 +27,7 @@ class ClassificationModel(AbstractModel):
         self.layers["Sigmoid1"] = Sigmoid()
         self.layers["Affine2"] = AffineLayer(self.params["W2"],
                                              self.params["b2"])
-        self.lastLayer = SoftmaxWithLoss()
+        self.last_layer = SoftmaxWithLoss()
 
     def load_weights(self, weight_path, weight_file):
         super(ClassificationModel, self).load_weights(weight_path, weight_file)

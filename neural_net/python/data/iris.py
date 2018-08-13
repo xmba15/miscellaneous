@@ -38,7 +38,7 @@ def load_iris_from_scikitlearn():
     return X
 
 
-def _load_iris(file_path, file_name, normalize=True, norm="l2", test_size=0.15,
+def _load_iris(file_path, file_name, normalize=True, norm="l2", test_size=0.2,
                random_state=42):
     """
     load iris dataset from machine learning repository

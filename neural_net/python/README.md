@@ -1,5 +1,7 @@
 ## Simple Classification Neural Network Trained on Iris Dataset
 
+# Network Design
+
 
 # Result:
  - Loss Graph

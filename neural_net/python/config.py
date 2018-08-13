@@ -29,3 +29,8 @@ class Config(object):
 
         with open(os.path.join(log_path, log_file), "wb") as f:
             pickle.dump(logs, f, pickle.HIGHEST_PROTOCOL)
+
+    def load_logs(self, log_path, log_file):
+        with open(os.path.join(log_path, log_file), "rb") as f:
+            logs = pickle.load(f)
+        return logs
