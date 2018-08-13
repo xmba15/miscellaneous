@@ -1,7 +1,15 @@
 ## Simple Classification Neural Network Trained on Iris Dataset
 
-# Network Design
+# Requirements
+ - pip install -r requirements
 
+# How to run
+ - Hoge
+
+# Network Design
+ - Optimizer: SGD
+ - batch size: 5
+ - lr: 0.01
 
 # Result:
  - Loss Graph
