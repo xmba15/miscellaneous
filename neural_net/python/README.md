@@ -19,6 +19,10 @@
  ```
 
 # Network Design
+ - The network comprises of two affine layers and an output layer (softmax with loss)
+ - Loss: Cross Entropy loss
+ - Input vectors (the length and width of the sepals and petals) are L2 normalized before being fetched into the networks
+ - Common DNN layer classes and fuctions are put in dnn modules. Iris dataset loader is put in data module. The model used in this experiment is put in model.py
  - Optimizer: SGD
  - batch size: 5
  - lr: 0.01
