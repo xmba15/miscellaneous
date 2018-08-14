@@ -5,9 +5,17 @@
  - pip install -r requirements
 
 # How to run
- - Training
+ - Training: run the following command. Weights for the current model will be saved into models directory. Loss and accuracy logs will be saved into logs directory
  ```bash
  python train.py
+ ```
+ - Testing: test will be run in parallely during training. If you want to see the test result seperatedly for the current trained model. Run:
+ ```bash
+ python test.py
+ ```
+ - Visualization: Run the following command to get the loss and accuracy graph saved in logs directory
+```bash
+ python visualization.py
  ```
 
 # Network Design
