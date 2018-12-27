@@ -2,17 +2,20 @@
 // All Rights Reserved.
 // Author: btran@btranPC (btran)
 
-#ifndef GRAPH_H
-#define GRAPH_H
+#ifndef GRAPH_HPP
+#define GRAPH_HPP
 
-typedef struct AdjListNode* AdjListNodePtr;
-typedef struct AdjList* AdjListPtr;
-typedef struct Graph* GraphPtr;
+#include <memory>
+
+typedef std::shared_ptr<struct AdjListNode> AdjListNodePtr;
+typedef std::shared_ptr<struct AdjList> AdjListPtr;
+typedef std::shared_ptr<struct Graph> GraphPtr;
 
 typedef struct AdjListNode {
   int dest;
   AdjListNodePtr next;
 } AdjListNode;
+
 
 typedef struct AdjList {
   AdjListNodePtr head;
@@ -30,4 +33,4 @@ void printGraph(GraphPtr graph);
 void addEdge(GraphPtr graph, int src, int dest);
 void printGraph(GraphPtr graph);
 
-#endif /* GRAPH_H */
+#endif /* GRAPH_HPP */

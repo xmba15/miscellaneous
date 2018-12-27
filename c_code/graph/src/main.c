@@ -18,5 +18,7 @@ int main(int argc, char *argv[]) {
 
   printGraph(graph);
 
+  free(graph);
+
   return 0;
 }
