@@ -35,7 +35,7 @@ GraphPtr createGraph(int V) {
 }
 
 void addEdge(GraphPtr graph, int src, int dest) {
-    AdjListNodePtr newNode = newAdjListNode(dest);
+  AdjListNodePtr newNode = newAdjListNode(dest);
   if (graph->array[src].head == NULL) {
     graph->array[src].head = newNode;
   } else {

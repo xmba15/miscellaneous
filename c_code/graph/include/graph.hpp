@@ -29,7 +29,6 @@ typedef struct Graph {
 AdjListNodePtr newAdjListNode(int dest);
 AdjListNodePtr getLastElement(AdjListNodePtr node);
 GraphPtr createGraph(int V);
-void printGraph(GraphPtr graph);
 void addEdge(GraphPtr graph, int src, int dest);
 void printGraph(GraphPtr graph);
 
