@@ -18,10 +18,18 @@ file(GLOB CPPFILES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/graph.cpp
   )
 
+file(GLOB BFS
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/BFS.cpp
+  )
+
 add_executable(${CMAKE_PROJECT_NAME}_c
   ${CFILES}
   )
 
 add_executable(${CMAKE_PROJECT_NAME}_cpp
   ${CPPFILES}
+  )
+
+add_executable(${CMAKE_PROJECT_NAME}_bfs
+  ${BFS}
   )
