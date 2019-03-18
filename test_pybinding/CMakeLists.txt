@@ -1,22 +1,15 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(test_pybinding)
-set (CMAKE_CXX_STANDARD 11)
-set(CMAKE_BUILD_TYPE)
-add_definitions("-Wall")
+project(example)
+set(PYBIND11_CPP_STANDARD -std=c++11)
 
+find_package(OpenCV REQUIRED)
 find_package(pybind11 REQUIRED)
 
-# include_directories()
+file(GLOB BASIC_SOURCE_FILES
+  ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
+  )
 
-# include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-# file(GLOB BASIC_SOURCE_FILES
-#   ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
-#   ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c
-#   )
-
-# add_executable(${CMAKE_PROJECT_NAME}
-#   ${BASIC_SOURCE_FILES}
-#   )
-
-# target_link_libraries(${CMAKE_PROJECT_NAME})
+pybind11_add_module(${PROJECT_NAME} SHARED ${BASIC_SOURCE_FILES})
+target_include_directories(${PROJECT_NAME} PUBLIC ${OpenCV_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PRIVATE pybind11::module ${OpenCV_LIBS})
