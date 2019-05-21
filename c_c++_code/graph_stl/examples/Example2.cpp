@@ -1,7 +1,7 @@
 /**
- * @file    Example1.cpp
+ * @file    Example2.cpp
  *
- * @brief   Example1 file
+ * @brief   test DFS
  *
  * @author  btran
  *
@@ -12,9 +12,11 @@
  */
 
 #include "Graph.hpp"
+#include "DFS.hpp"
 #include <iostream>
 
 using Graph = algo::Graph<int>;
+using DFS = algo::DFS<int>;
 
 int main(int argc, char *argv[])
 {
@@ -33,6 +35,9 @@ int main(int argc, char *argv[])
     g->addEdge(6, 8);
     g->addEdge(4, 2);
 
-    std::cout << *g << "\n";
+    DFS::Ptr dfs = std::make_shared<DFS>(g);
+
+    dfs->visit();
+
     return 0;
 }

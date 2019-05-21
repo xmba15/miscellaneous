@@ -29,6 +29,8 @@ template <typename T, typename WEIGHT_TYPE = double> class Graph
 
     using Edge = std::pair<Vertex, Vertex>;
 
+    using Ptr = std::shared_ptr<Graph>;
+
     explicit Graph(bool isDirected = false, bool isWeighted = false)
         : _isDirected(isDirected), _isWeighted(isWeighted)
     {
