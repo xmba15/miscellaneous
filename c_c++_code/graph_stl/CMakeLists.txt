@@ -24,3 +24,8 @@ add_executable(${PROJECT_NAME}_Example2
   ${CMAKE_CURRENT_SOURCE_DIR}/examples/Example2.cpp
   ${BASIC_SOURCE_FILES}
   )
+
+add_executable(${PROJECT_NAME}_Example3
+  ${CMAKE_CURRENT_SOURCE_DIR}/examples/Example3.cpp
+  ${BASIC_SOURCE_FILES}
+  )
