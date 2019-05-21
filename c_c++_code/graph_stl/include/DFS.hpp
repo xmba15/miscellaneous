@@ -14,44 +14,33 @@
 #ifndef DFS_H
 #define DFS_H
 
-#include "Graph.hpp"
+#include "Search.hpp"
 #include <iostream>
 #include <memory>
 #include <vector>
 
 namespace algo
 {
-template <typename T, typename WEIGHT_TYPE = double> class DFS
+template <typename T, typename WEIGHT_TYPE = double>
+class DFS : public Search<T, WEIGHT_TYPE>
 {
  public:
-    using Ptr = std::shared_ptr<DFS>;
     using GRAPH_TYPE = Graph<T, WEIGHT_TYPE>;
     using VERTEX_TYPE = typename Graph<T, WEIGHT_TYPE>::Vertex;
 
-    explicit DFS(const typename GRAPH_TYPE::Ptr &graphPtr);
-
-    const bool isDirected() const
+    explicit DFS(const typename GRAPH_TYPE::Ptr &graphPtr)
+        : Search<T, WEIGHT_TYPE>(graphPtr)
     {
-        return this->_graphPtr->isDirected();
     }
 
-    void visit(const VERTEX_TYPE &v);
+    void visit(const VERTEX_TYPE &v) override;
 
-    void visit();
+    void visit() override;
 
  private:
-    std::map<VERTEX_TYPE, bool> _visited;
     std::map<VERTEX_TYPE, int> _numbering;
     int _counter;
-
-    typename GRAPH_TYPE::Ptr _graphPtr;
 };
-
-template <typename T, typename WEIGHT_TYPE>
-DFS<T, WEIGHT_TYPE>::DFS(const typename GRAPH_TYPE::Ptr &graphPtr)
-    : _graphPtr(graphPtr)
-{
-}
 
 template <typename T, typename WEIGHT_TYPE>
 void DFS<T, WEIGHT_TYPE>::visit(const VERTEX_TYPE &v)
