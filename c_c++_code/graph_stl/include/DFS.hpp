@@ -70,7 +70,7 @@ void DFS<T, WEIGHT_TYPE>::visitUndirectedGraph(const VERTEX_TYPE &v)
     if (it != this->_graphPtr->adjList().end()) {
         for (const VERTEX_TYPE &vertex : it->second) {
             if (!this->_visited[vertex]) {
-                visit(vertex);
+                this->visitUndirectedGraph(vertex);
             }
         }
     }
@@ -88,7 +88,7 @@ void DFS<T, WEIGHT_TYPE>::visitDirectedGraph(const VERTEX_TYPE &v)
             std::cout << v << "->" << vertex;
             if (this->_numbering[vertex] == 0) {
                 std::cout << ": tree edge\n";
-                visit(vertex);
+                this->visitDirectedGraph(vertex);
             } else if (this->_numbering[vertex] > this->_numbering[v]) {
                 std::cout << ": forward edge\n";
             } else if (this->_visited[vertex]) {
