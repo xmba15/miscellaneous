@@ -11,8 +11,8 @@
  *
  */
 
-#include "Graph.hpp"
 #include "DFS.hpp"
+#include "Graph.hpp"
 #include <iostream>
 
 using Graph = algo::Graph<int>;
@@ -38,6 +38,8 @@ int main(int argc, char *argv[])
     DFS::Ptr dfs = std::make_shared<DFS>(g);
 
     dfs->visit();
+
+    dfs->showTopologicalSort();
 
     return 0;
 }

@@ -23,6 +23,7 @@ template <typename T, typename WEIGHT_TYPE = double>
 class BFS : public Search<T, WEIGHT_TYPE>
 {
  public:
+    using Ptr = std::shared_ptr<BFS>;
     using GRAPH_TYPE = Graph<T, WEIGHT_TYPE>;
     using VERTEX_TYPE = typename Graph<T, WEIGHT_TYPE>::Vertex;
 

@@ -23,6 +23,7 @@ template <typename T, typename WEIGHT_TYPE = double> class Search
  public:
     using Ptr = std::shared_ptr<Search>;
     using GRAPH_TYPE = Graph<T, WEIGHT_TYPE>;
+
     using VERTEX_TYPE = typename Graph<T, WEIGHT_TYPE>::Vertex;
 
     explicit Search(const typename GRAPH_TYPE::Ptr &graphPtr);
@@ -32,9 +33,13 @@ template <typename T, typename WEIGHT_TYPE = double> class Search
         return this->_graphPtr->isDirected();
     }
 
-    virtual void visit(const VERTEX_TYPE &v) = 0;
+    virtual void visit(const VERTEX_TYPE &v)
+    {
+    }
 
-    virtual void visit() = 0;
+    virtual void visit()
+    {
+    }
 
  protected:
     std::map<VERTEX_TYPE, bool> _visited;

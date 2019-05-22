@@ -62,6 +62,11 @@ template <typename T, typename WEIGHT_TYPE = double> class Graph
         return this->_isWeighted;
     }
 
+    const std::map<Vertex, int> &indegrees() const
+    {
+        return this->_indegrees;
+    }
+
     friend std::ostream &operator<<(std::ostream &os,
                                     const Graph<T, WEIGHT_TYPE> &g)
     {
@@ -82,8 +87,12 @@ template <typename T, typename WEIGHT_TYPE = double> class Graph
     }
 
  private:
+    void initializeIndegree(const Vertex &v);
+
     bool _isDirected;
     bool _isWeighted;
+
+    std::map<Vertex, int> _indegrees;
 
     // adjacency list
     std::map<Vertex, std::set<Vertex>> _adjList;
@@ -128,6 +137,14 @@ template <typename T, typename WEIGHT_TYPE> class Graph<T, WEIGHT_TYPE>::Vertex
 };
 
 template <typename T, typename WEIGHT_TYPE>
+void Graph<T, WEIGHT_TYPE>::initializeIndegree(const Vertex &v)
+{
+    if (this->_indegrees.find(v) == this->_indegrees.end()) {
+        this->_indegrees[v] = 0;
+    }
+}
+
+template <typename T, typename WEIGHT_TYPE>
 void Graph<T, WEIGHT_TYPE>::addEdge(const T &source, const T &dest,
                                     WEIGHT_TYPE weight)
 {
@@ -135,6 +152,14 @@ void Graph<T, WEIGHT_TYPE>::addEdge(const T &source, const T &dest,
     const Vertex destVertex(dest);
 
     this->_adjList[srcVertex].emplace(destVertex);
+
+    // set indegrees
+    this->initializeIndegree(destVertex);
+    this->initializeIndegree(srcVertex);
+    this->_indegrees[destVertex]++;
+    if (!this->_isDirected) {
+        this->_indegrees[srcVertex]++;
+    }
 
     if (!this->_isDirected) {
         this->_adjList[destVertex].emplace(srcVertex);

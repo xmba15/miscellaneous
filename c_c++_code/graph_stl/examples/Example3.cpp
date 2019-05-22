@@ -1,7 +1,7 @@
 /**
  * @file    Example3.cpp
  *
- * @brief   test BFS
+ * @brief   test Topological Sort
  *
  * @author  btran
  *
@@ -11,12 +11,12 @@
  *
  */
 
-#include "BFS.hpp"
 #include "Graph.hpp"
+#include <TopologicalSortKahn.hpp>
 #include <iostream>
 
 using Graph = algo::Graph<int>;
-using BFS = algo::BFS<int>;
+using TopologicalSortKahn = algo::TopologicalSortKahn<int>;
 
 int main(int argc, char *argv[])
 {
@@ -33,12 +33,22 @@ int main(int argc, char *argv[])
     g->addEdge(6, 3);
     g->addEdge(6, 7);
     g->addEdge(6, 8);
-    g->addEdge(4, 2);
-    g->addEdge(100, 1000);
 
-    BFS::Ptr bfs = std::make_shared<BFS>(g);
+    Graph::Ptr g2 = std::make_shared<Graph>(*g);
+    g2->addEdge(4, 2);
 
-    bfs->visit();
+    TopologicalSortKahn::Ptr tsk = std::make_shared<TopologicalSortKahn>(g);
+    if (tsk->doTopologicalSort()) {
+        tsk->printSortedVertices();
+    }
+
+    TopologicalSortKahn::Ptr tsk2 = std::make_shared<TopologicalSortKahn>(g2);
+    if (tsk2->doTopologicalSort()) {
+        tsk2->printSortedVertices();
+    } else {
+        std::cout << "None found"
+                  << "\n";
+    }
 
     return 0;
 }

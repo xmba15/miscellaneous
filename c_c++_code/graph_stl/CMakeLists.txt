@@ -15,17 +15,20 @@ file(GLOB BASIC_SOURCE_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c
   )
 
-add_executable(${PROJECT_NAME}_Example1
+# DFS
+add_executable(${PROJECT_NAME}_DFS
   ${CMAKE_CURRENT_SOURCE_DIR}/examples/Example1.cpp
   ${BASIC_SOURCE_FILES}
   )
 
-add_executable(${PROJECT_NAME}_Example2
+# BFS
+add_executable(${PROJECT_NAME}_BFS
   ${CMAKE_CURRENT_SOURCE_DIR}/examples/Example2.cpp
   ${BASIC_SOURCE_FILES}
   )
 
-add_executable(${PROJECT_NAME}_Example3
+# Topological sort Kahn
+add_executable(${PROJECT_NAME}_TopologicalSortKahn
   ${CMAKE_CURRENT_SOURCE_DIR}/examples/Example3.cpp
   ${BASIC_SOURCE_FILES}
   )
