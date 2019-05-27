@@ -16,46 +16,48 @@
 #ifndef TREE_HPP_
 #define TREE_HPP_
 
-#include <queue>
 #include <iostream>
+#include <memory>
+#include <queue>
 
-template <class T>
-struct Node
-{
-  T data;
-  struct Node<T> *left, *right;
+template <typename T> struct Node {
+    using Ptr = std::shared_ptr<Node>;
+    T data;
+    Ptr left, right;
 };
 
-template <class T>
-Node<T> *createNewNode(T data) {
-  Node<T> *temp = new Node<T>;
-  temp->data = data;
-  temp->left = nullptr;
-  temp->right = nullptr;
-  return temp;
+template <typename T> typename Node<T>::Ptr createNewNode(T data)
+{
+    typename Node<T>::Ptr temp = std::make_shared<Node<T>>();
+    temp->data = data;
+    temp->left = nullptr;
+    temp->right = nullptr;
+    return temp;
 }
 
-template <class T>
-void printLevelOrder(Node<T> *root)
+template <class T> void printLevelOrder(typename Node<T>::Ptr root)
 {
-  if (root == nullptr) {
-    return;
-  }
+    if (!root) {
+        return;
+    }
 
-  std::queue<Node<T> *> q;
-  q.push(root);
-  while (!q.empty())
-  {
-    Node<T> *node = q.front();
-    std::cout << node->data << "\n";
-    q.pop();
-    if (node->left != nullptr) {
-      q.push(node->left);
+    std::queue<typename Node<T>::Ptr> queuePtr;
+    queuePtr.push(root);
+
+    while (!queuePtr.empty()) {
+        typename Node<T>::Ptr node = queuePtr.front();
+
+        std::cout << node->data << "\n";
+        queuePtr.pop();
+
+        if (node->left) {
+            queuePtr.push(node->left);
+        }
+
+        if (node->right) {
+            queuePtr.push(node->right);
+        }
     }
-    if (node->right != nullptr) {
-      q.push(node->right);
-    }
-  }
 }
 
 #endif /* TREE_HPP_ */
