@@ -1,0 +1,25 @@
+language:
+  - cpp
+
+sudo: false
+
+compiler:
+  - gcc
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-trusty
+    packages:
+      - cmake
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cmake --build .
+  # - ctest
+
+notifications:
+  email: false

@@ -1,5 +1,5 @@
 /**
- * @file    tree.hpp
+ * @file    Tree.hpp
  *
  * @brief   test tree traversal using queue
  *

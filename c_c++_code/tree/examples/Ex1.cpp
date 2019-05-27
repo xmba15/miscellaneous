@@ -1,5 +1,5 @@
 /**
- * @file    main.cpp
+ * @file    Ex1.cpp
  *
  * @brief   test tree traversal using queue
  *
@@ -13,7 +13,7 @@
  *
  */
 
-#include "tree.hpp"
+#include "Tree.hpp"
 #include <memory>
 
 int main(int argc, char *argv[]) {
