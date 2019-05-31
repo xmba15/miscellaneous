@@ -48,6 +48,11 @@ template <typename T, typename WEIGHT_TYPE = double> class Graph
         return this->_weights;
     }
 
+    WEIGHT_TYPE weights(const Edge &e)
+    {
+        return this->_weights[e];
+    }
+
     int const &v() const;
 
     int const &e() const;
@@ -120,6 +125,12 @@ template <typename T, typename WEIGHT_TYPE> class Graph<T, WEIGHT_TYPE>::Vertex
     {
         return this->_info == other._info;
     }
+
+    bool operator!=(const Vertex &other) const
+    {
+        return this->_info != other._info;
+    }
+
 
     bool operator<(const Vertex &other) const
     {

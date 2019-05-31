@@ -27,3 +27,13 @@ target_link_libraries(
   Topological_Sort_Kahn
   graph_stl
   )
+
+add_executable(
+  PrimMST
+  ${CMAKE_CURRENT_LIST_DIR}/Example4.cpp
+  )
+
+target_link_libraries(
+  PrimMST
+  graph_stl
+  )
