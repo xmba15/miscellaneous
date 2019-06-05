@@ -3,6 +3,8 @@ language:
 
 sudo: false
 
+dist: xenial
+
 compiler:
   - gcc
 
@@ -13,6 +15,7 @@ addons:
       - llvm-toolchain-trusty
     packages:
       - cmake
+      - libeigen3-dev
 
 script:
   - mkdir build

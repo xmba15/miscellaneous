@@ -4,4 +4,8 @@ project(miscellaneous)
 set (CMAKE_CXX_STANDARD 11)
 set(CMAKE_BUILD_TYPE DEBUG)
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(utility)
+
 add_subdirectory(c_c++_code)
+add_subdirectory(eigen)
