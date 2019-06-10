@@ -16,7 +16,6 @@
 
 #include "Sorting.hpp"
 #include <memory>
-#include <utility>
 
 namespace algo
 {
@@ -29,10 +28,11 @@ class QuickSort : public Sorting<T, Container>
     using ContainerTypeIt = typename ContainerType::iterator;
 
     void sorting(ContainerType &container) override;
-    void sorting(ContainerType &container, size_t begin, size_t end);
+    void sorting(ContainerType &container, size_t low, size_t high);
 
  private:
     size_t partition(ContainerType &container, size_t begin, size_t end);
+    void swapping(T &, T &);
 };
 
 template <typename T,
@@ -47,8 +47,7 @@ template <typename T,
 void QuickSort<T, Container>::sorting(ContainerType &container, size_t low,
                                       size_t high)
 {
-    size_t length = low - high;
-    if (high >= container.size() || length <= 1) {
+    if (high >= container.size() || high <= low) {
         return;
     }
 
@@ -69,14 +68,26 @@ size_t QuickSort<T, Container>::partition(ContainerType &container, size_t low,
     for (int j = low; j <= high - 1; ++j) {
         if (container.at(j) <= pivot) {
             ++pivotIdx;
-            std::swap(container.at(j), container.at(pivotIdx));
+            this->swapping(container.at(j), container.at(pivotIdx));
         }
     }
 
     ++pivotIdx;
-    std::swap(container.at(high), container.at(pivotIdx));
+    this->swapping(container.at(high), container.at(pivotIdx));
 
     return static_cast<size_t>(pivotIdx);
+}
+
+template <typename T,
+          template <typename, typename = std::allocator<T>> class Container>
+void QuickSort<T, Container>::swapping(T &x, T &y)
+{
+    if (x == y)
+        return;
+
+    x = x + y;
+    y = x - y;
+    x = x - y;
 }
 
 }  // namespace algo
