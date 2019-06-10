@@ -11,6 +11,9 @@
  *
  */
 
+#ifndef INSERTIONSORT_HPP_
+#define INSERTIONSORT_HPP_
+
 #include "Sorting.hpp"
 #include <memory>
 
@@ -43,3 +46,5 @@ void InsertionSort<T, Container>::sorting(ContainerType &container)
 }
 
 }  // namespace algo
+
+#endif /* INSERTIONSORT_HPP_ */

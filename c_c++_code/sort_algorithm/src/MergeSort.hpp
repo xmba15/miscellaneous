@@ -11,6 +11,9 @@
  *
  */
 
+#ifndef MERGESORT_HPP_
+#define MERGESORT_HPP_
+
 #include "Sorting.hpp"
 #include <memory>
 
@@ -96,3 +99,4 @@ void MergeSort<T, Container>::merge(ContainerType &container, size_t begin,
 }
 
 }  // namespace algo
+#endif /* MERGESORT_HPP_ */
