@@ -31,7 +31,10 @@ class QuickSort : public Sorting<T, Container>
     void sorting(ContainerType &container, size_t low, size_t high);
 
  private:
-    size_t partition(ContainerType &container, size_t begin, size_t end);
+    size_t partition(ContainerType &container, size_t low, size_t high);
+    size_t partition(ContainerType &container, size_t low, size_t high,
+                     bool isFirstElemAsPivot);
+
     void swapping(T &, T &);
 };
 
@@ -51,7 +54,7 @@ void QuickSort<T, Container>::sorting(ContainerType &container, size_t low,
         return;
     }
 
-    size_t pivotIdx = partition(container, low, high);
+    size_t pivotIdx = partition(container, low, high, true);
     this->sorting(container, low, pivotIdx - 1);
     this->sorting(container, pivotIdx + 1, high);
 }
@@ -74,6 +77,31 @@ size_t QuickSort<T, Container>::partition(ContainerType &container, size_t low,
 
     ++pivotIdx;
     this->swapping(container.at(high), container.at(pivotIdx));
+
+    return static_cast<size_t>(pivotIdx);
+}
+
+template <typename T,
+          template <typename, typename = std::allocator<T>> class Container>
+size_t QuickSort<T, Container>::partition(ContainerType &container, size_t low,
+                                          size_t high, bool isFirstElemAsPivot)
+{
+    if (!isFirstElemAsPivot) {
+        return partition(container, low, high);
+    }
+
+    T pivot = container.at(low);
+
+    int pivotIdx = high + 1;
+    for (int j = high; j > low; --j) {
+        if (container.at(j) > pivot) {
+            --pivotIdx;
+            this->swapping(container.at(j), container.at(pivotIdx));
+        }
+    }
+
+    --pivotIdx;
+    this->swapping(container.at(low), container.at(pivotIdx));
 
     return static_cast<size_t>(pivotIdx);
 }
