@@ -33,6 +33,10 @@ template <typename T,
           template <typename, typename = std::allocator<T>> class Container>
 void InsertionSort<T, Container>::sorting(ContainerType &container)
 {
+    if (container.size() <= 1) {
+        return;
+    }
+
     for (auto IIt = container.begin() + 1; IIt != container.end(); ++IIt) {
         T curV = *IIt;
         auto JIt = IIt - 1;
