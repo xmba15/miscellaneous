@@ -1,10 +1,10 @@
 add_library(
-  test_tree
+  tree_algorithm
   INTERFACE
-  )
+)
 
 target_include_directories(
-  test_tree
+  tree_algorithm
   INTERFACE
   ${CMAKE_CURRENT_LIST_DIR}
-  )
+)

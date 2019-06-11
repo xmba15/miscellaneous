@@ -13,19 +13,25 @@
  *
  */
 
-#include "Tree.hpp"
+#include "BinaryTree.hpp"
 #include <memory>
+
+using Node = algo::Node<float>;
+using BinaryTree = algo::BinaryTree<float>;
+using algo::createNewNode;
 
 int main(int argc, char *argv[])
 {
-    Node<float>::Ptr rootPtr = createNewNode<float>(1);
+    Node::Ptr rootPtr = createNewNode<float>(1);
 
     rootPtr.get()->left = createNewNode<float>(2);
     rootPtr.get()->right = createNewNode<float>(3);
     rootPtr.get()->left->left = createNewNode<float>(4);
     rootPtr.get()->left->right = createNewNode<float>(5);
 
-    printLevelOrder<float>(rootPtr);
+    BinaryTree::Ptr binaryTree = std::make_shared<BinaryTree>(rootPtr);
+
+    binaryTree->traverse(BinaryTree::POSTORDER);
 
     return 0;
 }

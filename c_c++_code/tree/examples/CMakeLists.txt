@@ -1,9 +1,7 @@
-add_executable(
-  Ex1
-  ${CMAKE_CURRENT_LIST_DIR}/Ex1.cpp
-  )
+set(EX1_NAME "BinaryTree")
 
-target_link_libraries(
-  Ex1
-  test_tree
-  )
+build_example(
+  ${EX1_NAME}
+  ${CMAKE_CURRENT_LIST_DIR}/Ex1.cpp
+  tree_algorithm
+)
