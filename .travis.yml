@@ -1,12 +1,27 @@
 language:
   - cpp
+  - python
 
-sudo: false
+python:
+  - "3.6"
 
 dist: xenial
 
+sudo: false
+
 compiler:
   - gcc
+
+before_install:
+  # building open3d from source
+  - readonly PARENT_DIR=$(pwd)
+  - git clone --recursive https://github.com/intel-isl/Open3D
+  - cd ${PARENT_DIR}/Open3D
+  - bash ./util/scripts/install-deps-ubuntu.sh
+  - mkdir build && cd build
+  - cmake -D PYTHON_EXECUTABLE=$(python-config --prefix)/bin/python -D PYTHON_INCLUDE_DIR=$(python-config --prefix)/include/python3.6m -D PYTHON_LIBRARY=$(python-config --prefix)/lib/libpython3.6m.so ..
+  - make -j `nproc`
+  - sudo make install
 
 addons:
   apt:
@@ -18,6 +33,7 @@ addons:
       - libeigen3-dev
 
 script:
+  - cd ${PARENT_DIR}
   - mkdir build
   - cd build
   - cmake ..
