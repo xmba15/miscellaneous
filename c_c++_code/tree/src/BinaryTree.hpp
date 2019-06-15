@@ -18,8 +18,12 @@
 
 #include "Node.hpp"
 #include <iostream>
+#include <limits>
 #include <memory>
+#include <ostream>
 #include <queue>
+#include <sstream>
+#include <string>
 
 namespace algo
 {
@@ -54,7 +58,6 @@ template <typename T> class BinaryTree
     enum TRAVERSAL_TYPE { INORDER, PREORDER, POSTORDER };
 
     using NodePtr = typename Node<T>::Ptr;
-
     using Ptr = std::shared_ptr<BinaryTree>;
 
     explicit BinaryTree(const NodePtr &rootPtr);
@@ -69,14 +72,63 @@ template <typename T> class BinaryTree
         return _rootPtr;
     }
 
+    virtual void insert(const NodePtr &nodePtr)
+    {
+    }
+
     void traverse(TRAVERSAL_TYPE traversalType = INORDER);
     void traverse(const NodePtr &nodePtr,
                   TRAVERSAL_TYPE traversalType = INORDER);
+    bool isBinarySearchTree() const;
 
- private:
+    friend std::ostream &operator<<(std::ostream &os, const BinaryTree<T> &bt)
+    {
+        std::string title = "digraph";
+        std::string direction = " -> ";
+        std::string firstSpace = "    ";
+        os << title << " {\n";
+
+        os << bt.visualizeUtil(bt._rootPtr, direction, firstSpace);
+
+        os << "}";
+        return os;
+    }
+
+ protected:
+    bool isBinarySearchTree(const NodePtr &nodePtr) const;
+    bool isBinarySearchTreeUtil(const NodePtr &nodePtr, T min, T max) const;
     void traverseInorder(const NodePtr &nodePtr);    //  Left, Root, Right
     void traversePreorder(const NodePtr &nodePtr);   // Root, Left, Right
     void traversePostorder(const NodePtr &nodePtr);  // Left, Right, Root
+
+    std::string visualizeUtil(const NodePtr &nodePtr,
+                              const std::string &direction,
+                              const std::string &firstSpace) const
+    {
+        std::string result;
+
+        if (!nodePtr) {
+            return "";
+        }
+
+        if (nodePtr->left) {
+            result += visualizeUtil(nodePtr->left, direction, firstSpace);
+            std::stringstream ss;
+            ss << firstSpace << nodePtr->data << direction
+               << nodePtr->left->data << ";\n";
+            result += ss.str();
+        }
+
+        if (nodePtr->right) {
+            result += visualizeUtil(nodePtr->right, direction, firstSpace);
+            std::stringstream ss;
+            ss << firstSpace << nodePtr->data << direction
+               << nodePtr->right->data << ";\n";
+            result += ss.str();
+        }
+
+        return result;
+    }
 
  private:
     NodePtr _rootPtr;
@@ -85,6 +137,34 @@ template <typename T> class BinaryTree
 template <typename T>
 BinaryTree<T>::BinaryTree(const NodePtr &rootPtr) : _rootPtr(rootPtr)
 {
+}
+
+template <typename T> bool BinaryTree<T>::isBinarySearchTree() const
+{
+    return isBinarySearchTree(this->_rootPtr);
+}
+
+template <typename T>
+bool BinaryTree<T>::isBinarySearchTree(const NodePtr &nodePtr) const
+{
+    return isBinarySearchTreeUtil(nodePtr, std::numeric_limits<T>::min(),
+                                  std::numeric_limits<T>::max());
+}
+
+template <typename T>
+bool BinaryTree<T>::isBinarySearchTreeUtil(const NodePtr &nodePtr, T min,
+                                           T max) const
+{
+    if (!nodePtr) {
+        return true;
+    }
+
+    if (nodePtr->data <= min || nodePtr->data >= max) {
+        return false;
+    }
+
+    return isBinarySearchTreeUtil(nodePtr->left, min, nodePtr->data) &&
+           isBinarySearchTreeUtil(nodePtr->left, nodePtr->data, max);
 }
 
 template <typename T>

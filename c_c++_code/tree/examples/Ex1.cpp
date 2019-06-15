@@ -33,5 +33,12 @@ int main(int argc, char *argv[])
 
     binaryTree->traverse(BinaryTree::POSTORDER);
 
+    bool isBinarySearchTree = binaryTree->isBinarySearchTree();
+
+    std::cout << "Is this a binary search tree?" << "\n";
+    std::cout << isBinarySearchTree << "\n";
+
+    std::cout << *binaryTree << "\n";
+
     return 0;
 }
