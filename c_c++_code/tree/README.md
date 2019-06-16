@@ -14,6 +14,14 @@ A node-based binary tree data structure with the following properties:
 2. Same for a right subtree
 3. The left and right subtree must also be a binary search tree
 
+## Red Black Tree ##
+1. Every node is colored red or black
+2. Root node is a black node
+3. NULL children count as black nodes
+4. Children of a red node are black nodes
+5. For all nodes x:
+   - all paths from x to NIL's have the same number of black nodes on them
+
 ## Graphviz for visualization ##
 ### Sample dot file ###
 sample.dot
