@@ -41,5 +41,9 @@ int main(int argc, char *argv[])
 
     std::cout << *bst << "\n";
 
+    bst->deleteNode(bst->rootPtr(), 1);
+
+    std::cout << *bst << "\n";
+
     return 0;
 }
