@@ -52,12 +52,12 @@ template <class T> void printLevelOrder(typename Node<T>::Ptr root)
     }
 }
 
-template <typename T> class BinaryTree
+template <typename T, typename NodeType = Node<T>> class BinaryTree
 {
  public:
     enum TRAVERSAL_TYPE { INORDER, PREORDER, POSTORDER };
 
-    using NodePtr = typename Node<T>::Ptr;
+    using NodePtr = typename NodeType::Ptr;
     using Ptr = std::shared_ptr<BinaryTree>;
 
     explicit BinaryTree(const NodePtr &rootPtr);
@@ -81,7 +81,19 @@ template <typename T> class BinaryTree
                   TRAVERSAL_TYPE traversalType = INORDER);
     bool isBinarySearchTree() const;
 
-    friend std::ostream &operator<<(std::ostream &os, const BinaryTree<T> &bt)
+    int height(NodePtr node)
+    {
+        if (!node) {
+            return -1;
+        }
+
+        return node->height;
+    }
+
+    int getBalance(NodePtr node);
+
+    friend std::ostream &operator<<(std::ostream &os,
+                                    const BinaryTree<T, NodeType> &bt)
     {
         std::string title = "digraph";
         std::string direction = " -> ";
@@ -97,6 +109,7 @@ template <typename T> class BinaryTree
  protected:
     bool isBinarySearchTree(const NodePtr &nodePtr) const;
     bool isBinarySearchTreeUtil(const NodePtr &nodePtr, T min, T max) const;
+
     void traverseInorder(const NodePtr &nodePtr);    //  Left, Root, Right
     void traversePreorder(const NodePtr &nodePtr);   // Root, Left, Right
     void traversePostorder(const NodePtr &nodePtr);  // Left, Right, Root
@@ -130,30 +143,30 @@ template <typename T> class BinaryTree
         return result;
     }
 
- private:
     NodePtr _rootPtr;
 };
 
-template <typename T>
-BinaryTree<T>::BinaryTree(const NodePtr &rootPtr) : _rootPtr(rootPtr)
+template <typename T, typename NodeType>
+BinaryTree<T, NodeType>::BinaryTree(const NodePtr &rootPtr) : _rootPtr(rootPtr)
 {
 }
 
-template <typename T> bool BinaryTree<T>::isBinarySearchTree() const
+template <typename T, typename NodeType>
+bool BinaryTree<T, NodeType>::isBinarySearchTree() const
 {
     return isBinarySearchTree(this->_rootPtr);
 }
 
-template <typename T>
-bool BinaryTree<T>::isBinarySearchTree(const NodePtr &nodePtr) const
+template <typename T, typename NodeType>
+bool BinaryTree<T, NodeType>::isBinarySearchTree(const NodePtr &nodePtr) const
 {
     return isBinarySearchTreeUtil(nodePtr, std::numeric_limits<T>::min(),
                                   std::numeric_limits<T>::max());
 }
 
-template <typename T>
-bool BinaryTree<T>::isBinarySearchTreeUtil(const NodePtr &nodePtr, T min,
-                                           T max) const
+template <typename T, typename NodeType>
+bool BinaryTree<T, NodeType>::isBinarySearchTreeUtil(const NodePtr &nodePtr,
+                                                     T min, T max) const
 {
     if (!nodePtr) {
         return true;
@@ -164,11 +177,11 @@ bool BinaryTree<T>::isBinarySearchTreeUtil(const NodePtr &nodePtr, T min,
     }
 
     return isBinarySearchTreeUtil(nodePtr->left, min, nodePtr->data) &&
-           isBinarySearchTreeUtil(nodePtr->left, nodePtr->data, max);
+           isBinarySearchTreeUtil(nodePtr->right, nodePtr->data, max);
 }
 
-template <typename T>
-void BinaryTree<T>::traverseInorder(const NodePtr &nodePtr)
+template <typename T, typename NodeType>
+void BinaryTree<T, NodeType>::traverseInorder(const NodePtr &nodePtr)
 {
     if (!nodePtr) {
         return;
@@ -181,8 +194,8 @@ void BinaryTree<T>::traverseInorder(const NodePtr &nodePtr)
     this->traverseInorder(nodePtr->right);
 }
 
-template <typename T>
-void BinaryTree<T>::traversePreorder(const NodePtr &nodePtr)
+template <typename T, typename NodeType>
+void BinaryTree<T, NodeType>::traversePreorder(const NodePtr &nodePtr)
 {
     if (!nodePtr) {
         return;
@@ -195,8 +208,8 @@ void BinaryTree<T>::traversePreorder(const NodePtr &nodePtr)
     this->traversePreorder(nodePtr->right);
 }
 
-template <typename T>
-void BinaryTree<T>::traversePostorder(const NodePtr &nodePtr)
+template <typename T, typename NodeType>
+void BinaryTree<T, NodeType>::traversePostorder(const NodePtr &nodePtr)
 {
     if (!nodePtr) {
         return;
@@ -209,9 +222,9 @@ void BinaryTree<T>::traversePostorder(const NodePtr &nodePtr)
     std::cout << *nodePtr;
 }
 
-template <typename T>
-void BinaryTree<T>::traverse(const NodePtr &nodePtr,
-                             TRAVERSAL_TYPE traversalType)
+template <typename T, typename NodeType>
+void BinaryTree<T, NodeType>::traverse(const NodePtr &nodePtr,
+                                       TRAVERSAL_TYPE traversalType)
 {
     switch (traversalType) {
         case INORDER: {
@@ -231,11 +244,22 @@ void BinaryTree<T>::traverse(const NodePtr &nodePtr,
     }
 }
 
-template <typename T> void BinaryTree<T>::traverse(TRAVERSAL_TYPE traversalType)
+template <typename T, typename NodeType>
+void BinaryTree<T, NodeType>::traverse(TRAVERSAL_TYPE traversalType)
 {
     if (this->_rootPtr) {
         this->traverse(this->_rootPtr, traversalType);
     }
+}
+
+template <typename T, typename NodeType>
+int BinaryTree<T, NodeType>::getBalance(NodePtr node)
+{
+    if (!node) {
+        return 0;
+    }
+
+    return height(node->left) - height(node->right);
 }
 
 }  // namespace algo

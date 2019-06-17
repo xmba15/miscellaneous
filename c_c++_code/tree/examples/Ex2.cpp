@@ -45,5 +45,10 @@ int main(int argc, char *argv[])
 
     std::cout << *bst << "\n";
 
+    std::cout << "root height"
+              << "\n";
+
+    std::cout << bst->height(bst->rootPtr()) << "\n";
+
     return 0;
 }

@@ -20,9 +20,11 @@
 namespace algo
 {
 template <typename T> struct Node {
+    enum { RED, BLACK } color;
     using Ptr = std::shared_ptr<Node>;
     T data;
-    Ptr left, right;
+    int height;
+    Ptr left, right, parent;
 };
 
 template <typename T>
@@ -32,15 +34,34 @@ std::ostream &operator<<(std::ostream &os, const Node<T> &node)
     return os;
 }
 
-template <typename T> typename Node<T>::Ptr createNewNode(T data)
+template <typename T, typename NodeType = Node<T>>
+typename NodeType::Ptr createNewNode(T data)
 {
-    typename Node<T>::Ptr node = std::make_shared<Node<T>>();
+    typename NodeType::Ptr node = std::make_shared<NodeType>();
     node->data = data;
     node->left = nullptr;
     node->right = nullptr;
+    node->parent = nullptr;
+    int height = 0;
 
     return node;
 }
+
+// for convenience, Node struct holds all the variales needed to implement Red
+// Black Tree, AVL Tree.
+template <typename T> struct RBTNode {
+    enum { RED, BLACK } color;
+    using Ptr = std::shared_ptr<RBTNode>;
+    T data;
+    Ptr parent, left, right;
+};
+
+template <typename T> struct AVLNode {
+    using Ptr = std::shared_ptr<AVLNode>;
+    T data;
+    int height;
+    Ptr left, right;
+};
 
 }  // namespace algo
 #endif /* NODE_HPP_ */
