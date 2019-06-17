@@ -18,10 +18,31 @@
 
 namespace algo
 {
-template <typename T> class RedBlackTree : public BinarySearchTree<T>
+template <typename T, typename NodeType = RBTNode<T>>
+class RedBlackTree : public BinarySearchTree<T, NodeType>
 {
+ public:
+    using BinarySearchTree<T, NodeType>::BinarySearchTree;
+    using Ptr = std::shared_ptr<RedBlackTree>;
+    using NodePtr = typename BinarySearchTree<T>::NodePtr;
 
+    NodePtr insert(NodePtr node, T key) override;
+    NodePtr deleteNode(NodePtr node, T key) override;
 };
+
+template <typename T, typename NodeType>
+typename RedBlackTree<T, NodeType>::NodePtr
+RedBlackTree<T, NodeType>::insert(NodePtr node, T key)
+{
+    return nullptr;
+}
+
+template <typename T, typename NodeType>
+typename RedBlackTree<T, NodeType>::NodePtr
+RedBlackTree<T, NodeType>::deleteNode(NodePtr node, T key)
+{
+    return nullptr;
+}
 
 }  // namespace algo
 #endif /* REDBLACKTREE_HPP_ */

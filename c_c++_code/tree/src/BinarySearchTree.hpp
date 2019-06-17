@@ -19,22 +19,26 @@
 
 namespace algo
 {
-template <typename T> class BinarySearchTree : public BinaryTree<T>
+template <typename T, typename NodeType = Node<T>>
+class BinarySearchTree : public BinaryTree<T, NodeType>
 {
  public:
-    using BinaryTree<T>::BinaryTree;
+    using BinaryTree<T, NodeType>::BinaryTree;
     using NodePtr = typename BinaryTree<T>::NodePtr;
     using Ptr = std::shared_ptr<BinarySearchTree>;
 
     NodePtr search(const NodePtr &root, T key);
-    NodePtr insert(NodePtr node, T key);
-    NodePtr deleteNode(NodePtr node, T key);
+    virtual NodePtr insert(NodePtr node, T key);
+    virtual NodePtr deleteNode(NodePtr node, T key);
     NodePtr minValueNode(NodePtr node);
+
+    // rotations
+    NodePtr rightRotate(NodePtr node);
 };
 
-template <typename T>
-typename BinarySearchTree<T>::NodePtr
-BinarySearchTree<T>::search(const NodePtr &root, T key)
+template <typename T, typename NodeType>
+typename BinarySearchTree<T, NodeType>::NodePtr
+BinarySearchTree<T, NodeType>::search(const NodePtr &root, T key)
 {
     if (root == nullptr || root->data == key) {
         return root;
@@ -47,9 +51,9 @@ BinarySearchTree<T>::search(const NodePtr &root, T key)
     return search(root->left, key);
 }
 
-template <typename T>
-typename BinarySearchTree<T>::NodePtr BinarySearchTree<T>::insert(NodePtr node,
-                                                                  T key)
+template <typename T, typename NodeType>
+typename BinarySearchTree<T, NodeType>::NodePtr
+BinarySearchTree<T, NodeType>::insert(NodePtr node, T key)
 {
     if (node == nullptr) {
         node = createNewNode(key);
@@ -65,9 +69,9 @@ typename BinarySearchTree<T>::NodePtr BinarySearchTree<T>::insert(NodePtr node,
     return node;
 }
 
-template <typename T>
-typename BinarySearchTree<T>::NodePtr
-BinarySearchTree<T>::minValueNode(NodePtr node)
+template <typename T, typename NodeType>
+typename BinarySearchTree<T, NodeType>::NodePtr
+BinarySearchTree<T, NodeType>::minValueNode(NodePtr node)
 {
     NodePtr current = node;
     while (current && current->left) {
@@ -77,9 +81,9 @@ BinarySearchTree<T>::minValueNode(NodePtr node)
     return current;
 }
 
-template <typename T>
-typename BinarySearchTree<T>::NodePtr
-BinarySearchTree<T>::deleteNode(NodePtr node, T key)
+template <typename T, typename NodeType>
+typename BinarySearchTree<T, NodeType>::NodePtr
+BinarySearchTree<T, NodeType>::deleteNode(NodePtr node, T key)
 {
     if (!node) {
         return node;
@@ -105,6 +109,13 @@ BinarySearchTree<T>::deleteNode(NodePtr node, T key)
     }
 
     return node;
+}
+
+template <typename T, typename NodeType>
+typename BinarySearchTree<T, NodeType>::NodePtr
+BinarySearchTree<T, NodeType>::rightRotate(NodePtr node)
+{
+    return nullptr;
 }
 
 }  // namespace algo

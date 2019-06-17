@@ -32,15 +32,23 @@ std::ostream &operator<<(std::ostream &os, const Node<T> &node)
     return os;
 }
 
-template <typename T> typename Node<T>::Ptr createNewNode(T data)
+template <typename T, typename NodeType = Node<T>>
+typename NodeType::Ptr createNewNode(T data)
 {
-    typename Node<T>::Ptr node = std::make_shared<Node<T>>();
+    typename NodeType::Ptr node = std::make_shared<NodeType>();
     node->data = data;
     node->left = nullptr;
     node->right = nullptr;
 
     return node;
 }
+
+template <typename T> struct RBTNode {
+    enum { RED, BLACK } color;
+    using Ptr = std::shared_ptr<RBTNode>;
+    T data;
+    Ptr parent, left, right;
+};
 
 }  // namespace algo
 #endif /* NODE_HPP_ */
