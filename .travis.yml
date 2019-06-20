@@ -23,6 +23,8 @@ before_install:
   - make -j `nproc`
   - sudo make install
 
+  - sudo apt-get install libpcl-dev
+
 addons:
   apt:
     sources:
