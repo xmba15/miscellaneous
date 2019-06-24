@@ -42,5 +42,14 @@ int main(int argc, char *argv[])
 
     std::cout << *avlt << "\n";
 
+    std::cout << "delete root"
+              << "\n";
+
+    avlt->rootPtr() = avlt->deleteNode(avlt->rootPtr(), 12);
+
+    avlt->traverse(AVLTree::PREORDER);
+
+    std::cout << *avlt << "\n";
+
     return 0;
 }

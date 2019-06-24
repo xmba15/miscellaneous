@@ -113,23 +113,23 @@ AVLTree<T, NodeType>::deleteNode(NodePtr node, T key)
     int balance = this->getBalance(node);
 
     // Left Left Case
-    if (balance > 1 && key < node->left->data) {
+    if (balance > 1 && this->getBalance(node->left) >= 0) {
         return this->rightRotate(node);
     }
 
     // Right Right Case
-    if (balance < -1 && key > node->right->data) {
+    if (balance < -1 && this->getBalance(node->right) <= 0) {
         return this->leftRotate(node);
     }
 
     // Left Right Case
-    if (balance > 1 && key > node->left->data) {
+    if (balance > 1 && this->getBalance(node->left) < 0) {
         node->left = this->leftRotate(node->left);
         return this->rightRotate(node);
     }
 
     // Right Left Case
-    if (balance < -1 && key < node->right->data) {
+    if (balance < -1 && this->getBalance(node->right) > 0) {
         node->right = this->rightRotate(node->right);
         return this->leftRotate(node);
     }
