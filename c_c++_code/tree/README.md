@@ -22,9 +22,40 @@ A node-based binary tree data structure with the following properties:
 4. Children of a red node are black nodes
 5. For all nodes x:
    - all paths from x to NIL's have the same number of black nodes on them
+
 ### Insertion ###
 1. Recoloring
 2. Rotation
+
+Details: Insert node *N* into the tree.
+
+1. Normally insert *N* into tree in BST way
+2. After BST insertion, there are 4 cases for the RBT insertion to handle:
+   1. *N* is the root node
+   2. *N*'s parent (*P*) is black. This case does not break the property of RBT; so do nothing.
+   3. *P* is red and *N*'s uncle (*U*) is red
+   4. *P* is red and *U* is black
+
+#### Notice ####
+1. Property 1 and 3 always hold.
+2. Property 2 is checked and corrected with case 1.
+3. Property 4 is threatened by adding a red node, repainting a node from black to red, a rotation
+4. Property 5 is threatened by adding a black node, repainting a node, a rotation
+
+#### Illustration ####
+ * Case2:
+
+![Alt Case 2](./documents/RBTree/case2.png)
+
+ * Case 3:
+
+![Alt Case3](./documents/RBTree/case3.png "left") ----> ![Alt SolveCase3](./documents/RBTree/solvecase3.png "right")
+
+ * Case 4:
+
+(Inner Subtree)
+
+![Alt Case4_InnerSubtree](./documents/RBTree/case4_innersubtree.png)
 
 ## AVL Tree ##
 ### Definitions ###
