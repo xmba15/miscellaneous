@@ -26,19 +26,22 @@ int main(int argc, char *argv[])
 
     RedBlackTree::Ptr rbt = std::make_shared<RedBlackTree>(rootPtr);
 
-    // bst->insert(bst->rootPtr(), 10);
-    // bst->insert(bst->rootPtr(), 10);
-    // bst->insert(bst->rootPtr(), 12);
-    // bst->insert(bst->rootPtr(), 3);
-    // bst->insert(bst->rootPtr(), 0.5);
+    rbt->insert(rbt->rootPtr(), 10);
+    // rbt->insert(rbt->rootPtr(), 10);
+    // rbt->insert(rbt->rootPtr(), 12);
+    // rbt->insert(rbt->rootPtr(), 3);
+    // rbt->insert(rbt->rootPtr(), 0.5);
 
-    // bst->traverse();
+    // rbt->traverse();
 
-    // bool isBST = bst->isBinarySearchTree()();
+    bool isRBT = rbt->isBinarySearchTree();
 
-    // std::cout << "Is this a binary search tree?"
-    // << "\n";
-    // std::cout << isBST << "\n";
+    std::cout << "Is this a binary search tree?"
+              << "\n";
+
+    std::cout << isRBT << "\n";
+
+    std::cout << *rbt << "\n";
 
     return 0;
 }

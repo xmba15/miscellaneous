@@ -33,9 +33,10 @@ class BinarySearchTree : public BinaryTree<T, NodeType>
     virtual NodePtr deleteNode(NodePtr node, T key);
     NodePtr minValueNode(NodePtr node);
 
+ protected:
     // rotations
-    NodePtr rightRotate(NodePtr node);
-    NodePtr leftRotate(NodePtr node);
+    virtual NodePtr rightRotate(NodePtr node);
+    virtual NodePtr leftRotate(NodePtr node);
 };
 
 template <typename T, typename NodeType>
