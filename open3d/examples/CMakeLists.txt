@@ -3,6 +3,8 @@ find_package(Open3D)
 if(${Open3D_FOUND})
 message(STATUS "Open3d found")
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
+
 add_executable(test_load_open3d
   ${CMAKE_CURRENT_LIST_DIR}/TestOpen3D.cpp
 )
