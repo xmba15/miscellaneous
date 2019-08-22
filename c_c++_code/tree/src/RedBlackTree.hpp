@@ -15,6 +15,7 @@
 #define REDBLACKTREE_HPP_
 
 #include "BinarySearchTree.hpp"
+#include <cassert>
 
 namespace algo
 {
@@ -56,8 +57,11 @@ template <typename T, typename NodeType>
 typename RedBlackTree<T, NodeType>::NodePtr
 RedBlackTree<T, NodeType>::BSTInsert(NodePtr node, NodePtr nodeToInsert)
 {
+    assert(nodeToInsert);
+
     if (!node) {
-        return nodeToInsert;
+        node = nodeToInsert;
+        return node;
     }
 
     if (nodeToInsert->data < node->data) {
@@ -74,17 +78,21 @@ RedBlackTree<T, NodeType>::BSTInsert(NodePtr node, NodePtr nodeToInsert)
 template <typename T, typename NodeType>
 void RedBlackTree<T, NodeType>::fixViolation(NodePtr nodeToInsert)
 {
+    assert(nodeToInsert);
+    std::cout << "try stupid things"
+              << "\n";
+
     NodePtr uncleNode = this->uncle(nodeToInsert);
 
     if (!nodeToInsert->parent) {
         this->fixCase1(nodeToInsert);
-    } else if (nodeToInsert->parent->color == NodeType::BLACK) {
-        this->fixCase2(nodeToInsert);
-    } else if (uncleNode && uncleNode->color == NodeType::RED) {
-        this->fixCase3(nodeToInsert);
-    } else {
-        this->fixCase4(nodeToInsert);
-    }
+    }  //  else if (nodeToInsert->parent->color == NodeType::BLACK) {
+    //     this->fixCase2(nodeToInsert);
+    // } else if (uncleNode && uncleNode->color == NodeType::RED) {
+    //     this->fixCase3(nodeToInsert);
+    // } else {
+    //     this->fixCase4(nodeToInsert);
+    // }
 }
 
 template <typename T, typename NodeType>
@@ -154,10 +162,10 @@ RedBlackTree<T, NodeType>::insert(NodePtr node, T key)
 
     this->fixViolation(nodeToInsert);
 
-    node = nodeToInsert;
-    while (node->parent) {
-        node = node->parent;
-    }
+    // node = nodeToInsert;
+    // while (node->parent) {
+    //     node = node->parent;
+    // }
 
     return node;
 }
@@ -181,6 +189,9 @@ RedBlackTree<T, NodeType>::rightRotate(NodePtr node)
 
     NodePtr parentNode = node->parent;
     NodePtr x = node->left;
+
+    assert(x);
+
     NodePtr y = x->right;
 
     x->right = node;
@@ -216,10 +227,13 @@ RedBlackTree<T, NodeType>::leftRotate(NodePtr node)
 
     NodePtr parentNode = node->parent;
     NodePtr x = node->right;
+
+    assert(x);
+
     NodePtr y = x->left;
 
     x->left = node;
-    x->parent = node->parent;
+    x->parent = parentNode;
 
     if (parentNode) {
         if (node == parentNode->left) {
