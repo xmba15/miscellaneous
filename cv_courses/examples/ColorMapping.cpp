@@ -21,10 +21,11 @@ int main(int argc, char *argv[])
     const std::string SECOND = IMAGE_PATH + "im6.png";
 
     const cv::Mat first = cv::imread(FIRST);
-    const cv::Mat second = cv::imread(second);
+    const cv::Mat second = cv::imread(SECOND);
 
-
-
+    cv::imshow("first", first);
+    cv::waitKey(0);
+    cv::destroyAllWindows();
 #endif  // DATA_PATH
 
     return 0;
