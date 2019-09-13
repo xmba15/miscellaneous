@@ -31,6 +31,7 @@ addons:
     packages:
       - cmake
       - libeigen3-dev
+      - libboost-all-dev
 
 script:
   - cd ${PARENT_DIR}

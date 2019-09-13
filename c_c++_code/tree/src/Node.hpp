@@ -20,9 +20,10 @@
 namespace algo
 {
 template <typename T> struct Node {
-    enum { RED, BLACK } color;
+    enum Color { RED, BLACK };
     using Ptr = std::shared_ptr<Node>;
     T data;
+    bool color;
     int height;
     Ptr left, right, parent;
 };
@@ -42,6 +43,7 @@ typename NodeType::Ptr createNewNode(T data)
     node->left = nullptr;
     node->right = nullptr;
     node->parent = nullptr;
+    node->color = NodeType::RED;
     int height = 0;
 
     return node;
