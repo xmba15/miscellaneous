@@ -12,17 +12,6 @@ sudo: false
 compiler:
   - gcc
 
-before_install:
-  # building open3d from source
-  - readonly PARENT_DIR=$(pwd)
-  - git clone --recursive https://github.com/intel-isl/Open3D
-  - cd ${PARENT_DIR}/Open3D
-  - bash ./util/scripts/install-deps-ubuntu.sh
-  - mkdir build && cd build
-  - cmake -D PYTHON_EXECUTABLE=$(python-config --prefix)/bin/python -D PYTHON_INCLUDE_DIR=$(python-config --prefix)/include/python3.6m -D PYTHON_LIBRARY=$(python-config --prefix)/lib/libpython3.6m.so ..
-  - make -j `nproc`
-  - sudo make install
-
 addons:
   apt:
     sources:
@@ -30,8 +19,30 @@ addons:
       - llvm-toolchain-trusty
     packages:
       - cmake
+      - g++-6
       - libeigen3-dev
       - libboost-all-dev
+
+env:
+  - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+
+before_script:
+  - pyenv versions
+  - pyenv global 3.6.7
+
+  # building open3d from source
+  - readonly PARENT_DIR=$(pwd)
+  - git clone --recursive https://github.com/intel-isl/Open3D
+  - cd ${PARENT_DIR}/Open3D
+  - bash ./util/scripts/install-deps-ubuntu.sh
+  - mkdir build && cd build
+  - cmake \
+      -DPYTHON_EXECUTABLE=$(python-config --prefix)/bin/python3.6 \
+      -DPYTHON_LIBRARY=$(python-config --prefix)/lib/libpython3.6m.so \
+      -DPYTHON_INCLUDE_DIR=$(python-config --prefix)/include/python3.6m \
+      ..
+  - make -j `nproc`
+  - sudo make install
 
 script:
   - cd ${PARENT_DIR}
