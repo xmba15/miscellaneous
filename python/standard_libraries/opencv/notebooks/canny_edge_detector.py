@@ -101,24 +101,30 @@ class CannyEdgeDetector(object):
         return res
 
     def hysteresis(self, thresholded):
-        def eight_neighbors(row, col):
+        def eight_neighbors(row, col, rows, cols):
             indices = []
             for i in (-1, 0, 1):
                 for j in (-1, 0, 1):
                     if i == 0 and j == 0:
                         continue
-                    indices.append((row + i, col + j))
+                    row_idx = row + i
+                    col_idx = col + j
+                    if (row_idx < 0 or row_idx > rows - 1) or (
+                        col_idx < 0 or col_idx > cols - 1
+                    ):
+                        continue
+                    indices.append((row_idx, col_idx))
             return indices
 
         HEIGHT, WIDTH = thresholded.shape
 
         hysteresis_thresholded = np.copy(thresholded)
-        for ir in range(1, HEIGHT - 1):
-            for ic in range(1, WIDTH - 1):
+        for ir in range(HEIGHT):
+            for ic in range(WIDTH):
                 if thresholded[ir, ic] != THRESHOLD_PIXEL.WEAK.value:
                     continue
 
-                for idx in eight_neighbors(ir, ic):
+                for idx in eight_neighbors(ir, ic, HEIGHT, WIDTH):
                     if thresholded[idx[0], idx[1]] == THRESHOLD_PIXEL.STRONG.value:
                         hysteresis_thresholded[ir, ic] = THRESHOLD_PIXEL.STRONG.value
                         break
@@ -126,24 +132,29 @@ class CannyEdgeDetector(object):
                 if hysteresis_thresholded[ir, ic] == THRESHOLD_PIXEL.WEAK.value:
                     hysteresis_thresholded[ir, ic] = THRESHOLD_PIXEL.NON_RELEVANT.value
 
+        assert (
+            np.where(hysteresis_thresholded == THRESHOLD_PIXEL.STRONG.value)[0].size > 0
+        )
+        assert (
+            np.where(hysteresis_thresholded == THRESHOLD_PIXEL.NON_RELEVANT.value)[
+                0
+            ].size
+            > 0
+        )
         return hysteresis_thresholded
 
-    def hysteresis_img(self, thresholded, weak_value=25, strong_value=255):
-        result = np.copy(thresholded)
-
+    def hysteresis_img(self, thresholded, strong_value=255):
         hysteresis_thresholded = self.hysteresis(thresholded)
+        result = np.copy(hysteresis_thresholded)
         result[
             np.where(hysteresis_thresholded == THRESHOLD_PIXEL.STRONG.value)
         ] = strong_value
-        result[
-            np.where(hysteresis_thresholded == THRESHOLD_PIXEL.WEAK.value)
-        ] = weak_value
 
+        assert np.where(result == THRESHOLD_PIXEL.WEAK.value)[0].size == 0
         return result
 
     def edge_detection(
         self,
-        weak_value=25,
         strong_value=255,
         low_threshold_ratio=0.07,
         high_threshold_ratio=0.19,
@@ -156,6 +167,7 @@ class CannyEdgeDetector(object):
         thresholded = self.thresholding(
             nms_img, low_threshold_ratio, high_threshold_ratio
         )
-        edge_img = self.hysteresis_img(thresholded, weak_value, strong_value)
+
+        edge_img = self.hysteresis_img(thresholded, strong_value)
 
         return edge_img
