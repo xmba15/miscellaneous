@@ -1,0 +1,6 @@
+[submodule "motion_controller/mpc_osqp/third_party/osqp"]
+	path = motion_controller/mpc_osqp/third_party/osqp
+	url = https://github.com/oxfordcontrol/osqp.git
+[submodule "motion_controller/mpc_osqp/third_party/OsqpEigen"]
+	path = motion_controller/mpc_osqp/third_party/OsqpEigen
+	url = https://github.com/robotology/osqp-eigen.git
