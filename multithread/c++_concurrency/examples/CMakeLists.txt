@@ -1,5 +1,12 @@
 list(APPEND EXAMPLES
-  SimpleThread.cpp
+  SimpleThread
+  BasicThread
+  ThreadId
+  ThreadMutex
+  LockGuard
+  ConditionVariable
+  SumThread
+  SumThreadTask
 )
 
 include(cmake_utility)
