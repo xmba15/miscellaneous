@@ -11,12 +11,9 @@ cuda_select_nvcc_arch_flags(ARCH_FLAGS)
 
 if(CUDA_FOUND)
   message(STATUS "Cuda version: ${CUDA_VERSION}")
-  add_subdirectory(
-    examples/hello_world
-  )
-  add_subdirectory(
-    examples/vec_double
-  )
+  add_subdirectory(examples/hello_world)
+  add_subdirectory(examples/vec_double)
+  add_subdirectory(examples/shared_memory)
 else(CUDA_FOUND)
   message(STATUS "Cuda not found")
 endif(CUDA_FOUND)
