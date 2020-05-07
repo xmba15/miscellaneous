@@ -54,3 +54,7 @@ int main() {
 | Shared    | RW             | Fast  | No      | Each Block           | Block          |
 | Constant  | Read(R)        | Slow  | Yes     | Host and All Threads | Entire Program |
 | Texture   | R              | Slow  | Yes     | Host and All Threads | Entire Program |
+
+## Examples ##
+- julia set
+![julia set](./data/images/julia_set.png) 
