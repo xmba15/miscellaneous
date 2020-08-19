@@ -1,6 +1,7 @@
 list(APPEND EXAMPLES
   "ColorMapping"
   "ColorSpaceConversion"
+  "StereoMatching"
 )
 
 include(example_utility)
@@ -9,6 +10,7 @@ add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/data/images/")
 
 find_package(OpenCV 3 REQUIRED)
 find_package(Eigen3 REQUIRED)
+find_package(PCL REQUIRED)
 
 list(APPEND PUBLIC_LIBS
   ${PROJECT_TARGET_LIB_NAME}
