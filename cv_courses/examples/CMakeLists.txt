@@ -19,6 +19,7 @@ list(APPEND PUBLIC_LIBS
 list(APPEND PRIVATE_LIBS
   ${OpenCV_LIBS}
   Eigen3::Eigen
+  ${PCL_LIBRARIES}
 )
 
 foreach(EXAMPLE ${EXAMPLES})
@@ -30,5 +31,6 @@ foreach(EXAMPLE ${EXAMPLES})
   target_include_directories(${EXAMPLE}
     PUBLIC
       ${OpenCV_INCLUDE_DIRS}
+      ${PCL_INCLUDE_DIRS}
   )
 endforeach(EXAMPLE)
