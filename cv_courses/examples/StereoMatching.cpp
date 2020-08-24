@@ -8,6 +8,7 @@
 #include <utility>
 
 #include <opencv2/opencv.hpp>
+#include <opencv2/stereo.hpp>
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/visualization/pcl_visualizer.h>
@@ -23,9 +24,11 @@ struct CalibrationParam {
     double cy = 522.410129;
 };
 
-std::pair<CalibrationParam, CalibrationParam> getCalibParams(const float scaleFactor = 1.0);
+std::pair<CalibrationParam, CalibrationParam> getCalibParams(const float scaleFactorX = 1.0,
+                                                             const float scaleFactorY = 1.0);
 
-double BASE_LINE = -2.322887e-01 * 1000;  // mm
+double BASE_LINE = 2.322887e-01;  // meter
+double MAX_DEPTH = 10.0;           // meter
 
 using PointCloudType = pcl::PointXYZRGB;
 using PointCloud = pcl::PointCloud<PointCloudType>;
@@ -37,77 +40,71 @@ pcl::visualization::PCLVisualizer::Ptr initializeViewer();
 int main(int argc, char* argv[])
 {
     const std::string IMAGE_PATH = std::string(DATA_PATH) + "/";
-    const std::string LEFT_PATH = IMAGE_PATH + "left.jpg";
-    const std::string RIGHT_PATH = IMAGE_PATH + "right.jpg";
+    const std::string LEFT_PATH = IMAGE_PATH + "left.png";
+    const std::string RIGHT_PATH = IMAGE_PATH + "right.ppg";
 
     cv::Mat left = cv::imread(LEFT_PATH, 1);
     cv::Mat right = cv::imread(RIGHT_PATH, 1);
 
-    const float scaleFactor = 0.5;
-    cv::resize(left, left, cv::Size(), scaleFactor, scaleFactor);
-    cv::resize(right, right, cv::Size(), scaleFactor, scaleFactor);
-
-    int minDisparity = 0;
-    // int rangeDisparity = ((left.cols / 8) + 15) & -16;
-    int rangeDisparity = 16 * 10;
-    int SADWindowSize = 5;
-    const int disparityMultiplier = 16.0;
-
-    cv::Ptr<cv::StereoSGBM> sgbm = cv::StereoSGBM::create(minDisparity, rangeDisparity, SADWindowSize);
-    // int cn = left.channels();
-    // sgbm->setPreFilterCap(63);
-    // sgbm->setP1(8 * cn * sgbmWinSize * sgbmWinSize);
-    // sgbm->setP2(32 * cn * sgbmWinSize * sgbmWinSize);
-    // sgbm->setMode(cv::StereoSGBM::MODE_SGBM_3WAY);
-
-    cv::Mat disp;
-    sgbm->compute(left, right, disp);
-    // divide by 16 to get the true disparity value
-    disp.convertTo(disp, CV_32F, 1.0 / disparityMultiplier);
-
-    cv::Mat disp8U = cv::Mat(disp.rows, disp.cols, CV_8UC1);
-    cv::normalize(disp, disp8U, 0, 255, cv::NORM_MINMAX, CV_8UC1);
-    cv::imshow("results/BM.jpg", disp8U);
-    cv::waitKey(0);
-    cv::destroyAllWindows();
-
-    const auto calibParams = ::getCalibParams(scaleFactor);
-    cv::Mat Q = cv::Mat(4, 4, CV_64F, double(0));
-    Q.at<double>(0, 0) = 1.0;
-    Q.at<double>(0, 3) = -calibParams.first.cx;
-    Q.at<double>(1, 1) = 1.0;
-    Q.at<double>(1, 3) = -calibParams.first.cy;
-    Q.at<double>(2, 3) = calibParams.first.fx;
-    Q.at<double>(3, 2) = -1.0 / BASE_LINE * scaleFactor;
-    Q.at<double>(3, 3) = (calibParams.first.cx - calibParams.second.cx) / BASE_LINE * scaleFactor;
-
-    cv::Mat xyz;
-    cv::reprojectImageTo3D(disp8U, xyz, Q, true);
-
+    const float scaleFactorX = 1.0;
+    const float scaleFactorY = 1.0;
+    const auto calibParams = ::getCalibParams(scaleFactorX, scaleFactorY);
     PointCloudPtr output(new PointCloud);
 
-    for (int i = 0; i < xyz.rows; i++) {
-        auto imgCurRow = left.ptr<cv::Vec3b>(i);
+    // cv::resize(left, left, cv::Size(), scaleFactorX, scaleFactorY);
+    // cv::resize(right, right, cv::Size(), scaleFactorX, scaleFactorY);
+
+    // int minDisparity = 0;
+    // int rangeDisparity = 16 * 10;
+    // int SADWindowSize = 5;
+    // int channel = left.channels();
+    // const int disparityMultiplier = 16.0;
+
+    // cv::Ptr<cv::stereo::StereoBinarySGBM> sgbm =
+    //     cv::stereo::StereoBinarySGBM::create(0,              //int minDisparity
+    //                                          64,             //int numDisparities
+    //                                          SADWindowSize,  //int SADWindowSize
+    //                                          10,             //int P1 = 0
+    //                                          100,            //int P2 = 0
+    //                                          1,              //int disp12MaxDiff = 0
+    //                                          0,              //int preFilterCap = 0
+    //                                          5,              //int uniquenessRatio = 0
+    //                                          400,            //int speckleWindowSize = 0
+    //                                          0               //int speckleRange = 0
+    //     );
+
+    // cv::Mat disp;
+    // sgbm->compute(left, right, disp);
+    // // divide by 16 to get the true disparity value
+    // disp.convertTo(disp, CV_32F, 1.0 / disparityMultiplier);
+
+    // cv::Mat disp8U = cv::Mat(disp.rows, disp.cols, CV_8UC1);
+    // cv::normalize(disp, disp8U, 0, 255, cv::NORM_MINMAX, CV_8UC1);
+    // cv::imshow("results/BM.jpg", disp8U);
+    // cv::waitKey(0);
+    // cv::destroyAllWindows();
+
+    // const std::string IMAGE_PATH = std::string(DATA_PATH) + "/";
+    const std::string DISPARITY_PATH = IMAGE_PATH + "outer_pred.png";
+
+    cv::Mat disp8U = cv::imread(DISPARITY_PATH, 0);
+
+    for (int i = 0; i < disp8U.rows; ++i) {
         auto curRow = disp8U.ptr<uchar>(i);
-        for (int j = 0; j < xyz.cols; j++) {
-            cv::Point3f p = xyz.at<cv::Point3f>(i, j);
-            double radius = std::sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
-            if (radius > 20 * 1000) {
-                continue;
-            }
+        auto imgCurRow = left.ptr<cv::Vec3b>(i);
 
-            float curDisp = curRow[j];
-            double d = curDisp + minDisparity;
-            pcl::PointXYZRGB point;
-            point.x = p.x / 1000.;
-            point.y = p.y / 1000.;
-            point.z = p.z / 1000.;
+        for (int j = 0; j < disp8U.cols; ++j) {
+            double z = calibParams.first.fx * BASE_LINE / static_cast<int>(curRow[j]);
+            double x = (j - calibParams.first.cx) * z / calibParams.first.fx;
+            double y = (i - calibParams.first.cy) * z / calibParams.first.fx;
 
-            point.x = p.z / 1000.;
-            point.y = -p.x / 1000.;
-            point.z = -p.y / 1000.;
+            PointCloudType point;
+            point.x = z;
 
-            if (point.x < 0 || point.x > 5) {
+            point.y = -x;
+            point.z = -y;
+
+            if (point.x > MAX_DEPTH) {
                 continue;
             }
 
@@ -134,18 +131,18 @@ int main(int argc, char* argv[])
 
 namespace
 {
-std::pair<CalibrationParam, CalibrationParam> getCalibParams(const float scaleFactor)
+std::pair<CalibrationParam, CalibrationParam> getCalibParams(const float scaleFactorX, const float scaleFactorY)
 {
     CalibrationParam left, right;
-    left.fx = 1936. * scaleFactor;
-    left.fy = 1096.0 * scaleFactor;
-    left.cx = 972.332144 * scaleFactor;
-    left.cy = 522.410129 * scaleFactor;
+    left.fx = 1936. * scaleFactorX;
+    left.fy = 1096.0 * scaleFactorY;
+    left.cx = 972.332144 * scaleFactorX;
+    left.cy = 522.410129 * scaleFactorY;
 
-    right.fx = 1936 * scaleFactor;
-    right.fy = 1096 * scaleFactor;
-    right.cx = 932.214570 * scaleFactor;
-    right.cy = 525.280171 * scaleFactor;
+    right.fx = 1936 * scaleFactorX;
+    right.fy = 1096 * scaleFactorY;
+    right.cx = 932.214570 * scaleFactorX;
+    right.cy = 525.280171 * scaleFactorY;
 
     return std::make_pair(left, right);
 }

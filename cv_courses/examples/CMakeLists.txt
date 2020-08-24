@@ -2,6 +2,7 @@ list(APPEND EXAMPLES
   "ColorMapping"
   "ColorSpaceConversion"
   "StereoMatching"
+  "DisparityVis"
 )
 
 include(example_utility)
