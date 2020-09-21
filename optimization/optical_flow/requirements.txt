@@ -1,0 +1,6 @@
+git+https://github.com/utiasSTARS/liegroups.git
+opencv-python
+numpy
+matplotlib
+scipy
+numba

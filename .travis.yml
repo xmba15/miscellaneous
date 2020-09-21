@@ -1,0 +1,56 @@
+language:
+  - cpp
+  - python
+
+python:
+  - "3.6"
+
+dist: xenial
+
+sudo: false
+
+compiler:
+  - gcc
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-trusty
+    packages:
+      - cmake
+      - g++-6
+      - libeigen3-dev
+      - libboost-all-dev
+
+env:
+  - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+
+before_script:
+  - pyenv versions
+  - pyenv global 3.6.7
+
+  # building open3d from source
+  - readonly PARENT_DIR=$(pwd)
+  - git clone --recursive https://github.com/intel-isl/Open3D
+  - cd ${PARENT_DIR}/Open3D
+  - bash ./util/scripts/install-deps-ubuntu.sh
+  - mkdir build && cd build
+  - cmake \
+      -DPYTHON_EXECUTABLE=$(python-config --prefix)/bin/python3.6 \
+      -DPYTHON_LIBRARY=$(python-config --prefix)/lib/libpython3.6m.so \
+      -DPYTHON_INCLUDE_DIR=$(python-config --prefix)/include/python3.6m \
+      ..
+  - make -j `nproc`
+  - sudo make install
+
+script:
+  - cd ${PARENT_DIR}
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cmake --build .
+  # - ctest
+
+notifications:
+  email: false

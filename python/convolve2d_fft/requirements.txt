@@ -1,0 +1,8 @@
+scipy
+numpy
+opencv-python
+jupyter
+seaborn
+
+# jupyter notebooks formatter
+jupyter_contrib_nbextensions

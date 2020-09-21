@@ -1,0 +1,18 @@
+[submodule "motion_controller/mpc_osqp/third_party/osqp"]
+	path = motion_controller/mpc_osqp/third_party/osqp
+	url = https://github.com/oxfordcontrol/osqp.git
+[submodule "motion_controller/mpc_osqp/third_party/OsqpEigen"]
+	path = motion_controller/mpc_osqp/third_party/OsqpEigen
+	url = https://github.com/robotology/osqp-eigen.git
+[submodule "slam_book/draw_coordinate/third_parties/Pangolin"]
+	path = slam_book/draw_coordinate/third_parties/Pangolin
+	url = https://github.com/stevenlovegrove/Pangolin
+[submodule "optimization/nonlinear_least_squares/externals/matplotplusplus"]
+	path = optimization/nonlinear_least_squares/externals/matplotplusplus
+	url = https://github.com/alandefreitas/matplotplusplus
+[submodule "optimization/icp_ceres/externals/Sophus"]
+	path = optimization/icp_ceres/externals/Sophus
+	url = https://github.com/strasdat/Sophus.git
+[submodule "cv_courses/gaussian_mixture_model/externals/matplotplusplus"]
+	path = cv_courses/gaussian_mixture_model/externals/matplotplusplus
+	url = https://github.com/alandefreitas/matplotplusplus.git

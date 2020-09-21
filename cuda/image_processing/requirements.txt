@@ -1,0 +1,5 @@
+opencv-python
+pycuda
+
+flake8
+black
