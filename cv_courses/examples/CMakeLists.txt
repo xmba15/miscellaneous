@@ -3,13 +3,14 @@ list(APPEND EXAMPLES
   "ColorSpaceConversion"
   "StereoMatching"
   "DisparityVis"
+  "Plot"
 )
 
 include(example_utility)
 
 add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/data/images/")
 
-find_package(OpenCV 3 REQUIRED)
+find_package(OpenCV REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(PCL REQUIRED)
 
