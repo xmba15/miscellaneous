@@ -7,7 +7,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 find_package(TensorRT REQUIRED)
 find_package(CUDA REQUIRED)
-find_package(OpenCV 4 REQUIRED)
+find_package(OpenCV REQUIRED)
 
 add_executable(testtensort
   ${PROJECT_SOURCE_DIR}/main.cpp
