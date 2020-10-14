@@ -1,0 +1,22 @@
+# Resources for Small-sized Robocar #
+***
+
+- [University of California San Diego, Introduction To Autonomous Vehicles](https://guitar.ucsd.edu/maeece148/index.php/2019FallTeam5)
+- [Self Driving Truck](https://github.com/joneivind/Self-Driving-Truck)
+- [MIT Racecar](https://github.com/mit-racecar)
+- [Turtlebot3](https://github.com/ROBOTIS-GIT/turtlebot3)
+- [Lino Robot](https://github.com/linorobot/linorobot)
+- [Jackal Robot](https://github.com/jackal)
+- [DIY driverless car ROS](https://github.com/wilselby/diy_driverless_car_ROS/tree/master/rover_gazebo/scripts)
+- [project aslan](https://github.com/project-aslan/Aslan)
+- [self driving golf-cart](https://github.com/sigmaai/self-driving-golf-cart)
+- [Autonomous Racing Software Stack and Simulation Enviroment](https://github.com/Autonomous-Racing-PG/ar-tu-do)
+- [lgsvl simulator](https://github.com/lgsvl)
+- [rc car ros](https://github.com/GigaFlopsis/rc_car_ros)
+- [following car](https://github.com/expectopatronm/platooning-demonstrator)
+- [jetson community](https://developer.nvidia.com/embedded/community/jetson-projects)
+- [traffic cone driving](https://github.com/dvillevald/Finding-path-in-maze-of-traffic-cones)
+- [hypharos minicar, control](https://github.com/Hypha-ROS/hypharos_minicar)
+- [autorally](https://github.com/AutoRally/autorally)
+- [hypharos workshop, usefull info](https://hypharosworkshop.wordpress.com/projects/)
+- [autonomous robots lab](https://www.autonomousrobotslab.com/code.html)
