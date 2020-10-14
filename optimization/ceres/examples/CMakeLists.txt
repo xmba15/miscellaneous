@@ -8,5 +8,4 @@ target_include_directories(hello_world
 target_link_directories(hello_world
   PUBLIC
     {CERES_LIBRARIES}
-    Eigen3::Eigen
 )
