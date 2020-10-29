@@ -19,3 +19,18 @@ target_link_libraries(test_maskrcnn
   PUBLIC
     ${OpenCV_LIBRARIES}
 )
+
+add_executable(yolov4
+  ${PROJECT_SOURCE_DIR}/src/Yolov4.cpp
+  ${PROJECT_SOURCE_DIR}/src/Yolov4App.cpp
+)
+
+target_include_directories(yolov4
+  PUBLIC
+    ${OpenCV_INCLUDE_DIRS}
+)
+
+target_link_libraries(yolov4
+  PUBLIC
+    ${OpenCV_LIBRARIES}
+)
