@@ -14,34 +14,22 @@
 
 int main(int argc, char* argv[])
 {
-    if (argc != 2) {
-        std::cerr << "Usage: [app] [path/to/kitti/stereo/2015/training/dir]\n";
+    if (argc != 3) {
+        std::cerr << "Usage: [app] [path/to/left/image] [path/to/right/image]\n";
         return EXIT_FAILURE;
     }
 
-    const std::string dataBasePath = argv[1];
-    const std::string leftImagePath = dataBasePath + "/" + "image_2";
-    const std::string rightImagePath = dataBasePath + "/" + "image_3";
-    const auto leftImages = parseDirectory(leftImagePath);
-    const auto rightImages = parseDirectory(rightImagePath);
-    if (leftImages.size() != rightImages.size()) {
-        throw std::runtime_error("two set must have same size\n");
-    }
+    const std::string leftImagePath = argv[1];
+    const std::string rightImagePath = argv[2];
 
-    for (std::size_t i = 0; i < leftImages.size(); ++i) {
-        std::cout << leftImages[i] << std::endl;
+    cv::Mat leftImage = cv::imread(leftImagePath, 0);
+    cv::Mat rightImage = cv::imread(rightImagePath, 0);
 
-        cv::Mat leftImage = cv::imread(leftImages[i]);
-        cv::Mat rightImage = cv::imread(rightImages[i]);
-        cv::Mat concatImage;
-        cv::vconcat(leftImage, rightImage, concatImage);
-        cv::imshow("Image", concatImage);
-        if (static_cast<char>(cv::waitKey(200)) == 27) {
-            break;
-        }
-    }
+    std::cout << "height: " << leftImage.rows << " ,width: " << leftImage.cols << "\n";
 
-    cv::destroyAllWindows();
+    BlockMatchingParam params;
+    std::unique_ptr<StereoEngine> stereoEngine(new BlockMatching(params));
+    cv::Mat disparity = stereoEngine->match(leftImage, rightImage);
 
     return EXIT_SUCCESS;
 }
