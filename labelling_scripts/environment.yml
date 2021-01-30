@@ -1,0 +1,9 @@
+name: labelling_scripts
+channels:
+  - defaults
+dependencies:
+  - python >=3.6
+  - anaconda
+  - pip
+  - pip:
+      - -r file:requirements.txt
