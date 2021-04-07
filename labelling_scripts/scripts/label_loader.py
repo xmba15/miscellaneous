@@ -27,6 +27,28 @@ class DetectionLabelLoader:
         return labels, bbox_list
 
     @staticmethod
+    def load_label_me(json_path: str):
+        assert os.path.isfile(json_path)
+
+        json_dict = {}
+        with open(json_path) as f:
+            json_dict = json.load(f)
+        assert len(json_dict) != 0
+
+        file_name = json_dict["imagePath"]
+        image_height = json_dict["imageHeight"]
+        image_width = json_dict["imageWidth"]
+
+        labels = []
+        bbox_list = []
+        for obj in json_dict["shapes"]:
+            labels.append(obj["label"])
+            [xmin, ymin], [xmax, ymax] = obj["points"]
+            bbox_list.append([xmin, ymin, xmax, ymax])
+
+        return file_name, image_height, image_width, labels, bbox_list
+
+    @staticmethod
     def create_label_me_json_dict(img_path, img_name, img_height, img_width, labels, bbox_list):
         assert len(bbox_list) == len(labels)
 
