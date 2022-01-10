@@ -1,0 +1,16 @@
+name: onnx
+channels:
+  - defaults
+  - pytorch
+dependencies:
+  - python=3.6
+  - cudatoolkit=10.2
+  - cudnn=7.6.5
+  - pip
+  - pip:
+      - -r requirements.txt
+
+      # environment tools
+      - black
+      - isort
+      - mypy
