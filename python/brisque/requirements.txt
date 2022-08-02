@@ -1,0 +1,4 @@
+googledrivedownloader
+requests
+opencv-python
+opencv-contrib-python
