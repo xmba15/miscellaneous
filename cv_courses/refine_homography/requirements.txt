@@ -1,0 +1,5 @@
+opencv-python==4.5.3.56
+opencv-contrib-python==4.5.3.56
+scipy
+kornia==v0.7.0
+kornia_moons
