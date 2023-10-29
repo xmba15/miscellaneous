@@ -5,6 +5,7 @@ import cv2
 import kornia.feature as KF
 import numpy as np
 import torch
+from scipy import optimize
 
 from build_panorama import build_panorama
 
@@ -13,7 +14,8 @@ from build_panorama import build_panorama
 class MatchGroup:
     query_kpts: List[cv2.KeyPoint]
     ref_kpts: List[cv2.KeyPoint]
-    mask: np.ndarray
+    query_idx: int
+    ref_idx: int
     homography: Optional[np.ndarray]
 
 
@@ -46,7 +48,7 @@ def get_cv2_kpts(kpts_tensor):
     ]
 
 
-def match_keypoints(matcher, features0, features1, device):
+def match_keypoints(matcher, features0, features1, device, query_idx, ref_idx):
     kpts0, descs0 = features0.keypoints, features0.descriptors
     kpts1, descs1 = features1.keypoints, features1.descriptors
 
@@ -64,9 +66,11 @@ def match_keypoints(matcher, features0, features1, device):
         cv2.USAC_MAGSAC,
         5.0,
     )
+
     kpts0 = get_cv2_kpts(mkpts0)
-    kpts1 = get_cv2_kpts(mkpts0)
-    return MatchGroup(kpts0, kpts1, mask, M)
+    kpts1 = get_cv2_kpts(mkpts1)
+
+    return MatchGroup(kpts0, kpts1, query_idx, ref_idx, M)
 
 
 def main():
@@ -97,6 +101,8 @@ def main():
                 features_list[query_idx],
                 features_list[ref_idx],
                 device,
+                query_idx,
+                ref_idx,
             )
         )
 
@@ -104,10 +110,93 @@ def main():
     homographies = []
     for idx, match_group in enumerate(match_groups):
         cur_homography = cur_homography.dot(match_group.homography)
+        cur_homography /= cur_homography[2, 2]
         homographies.append(cur_homography.copy())
+
+    print("before refinement:")
+    for homography in homographies:
+        print(homography)
 
     panorama = build_panorama(images[0], images[1:], homographies)
     cv2.imwrite("panorama.jpg", panorama)
+
+    print("after refinement:")
+    homographies_params = []
+    for homography in homographies:
+        homographies_params += homography.ravel().tolist()
+    homographies_params = np.array(homographies_params)
+
+    sol = optimize.least_squares(
+        fun=_optimize_func, x0=homographies_params, args=(match_groups,), method="lm"
+    )
+
+    refined_homographies = get_homographies_from_sol(sol.x)
+    for homography in refined_homographies:
+        print(homography)
+
+    refined_panorama = build_panorama(images[0], images[1:], refined_homographies)
+    cv2.imwrite("refined_panorama.jpg", refined_panorama)
+
+
+def get_homographies_from_sol(solution):
+    num_homographies = len(solution) // 9
+    homographies = []
+    for idx in range(num_homographies):
+        homography = np.array(solution[idx * 9 : idx * 9 + 9]).reshape(3, 3)
+        homography /= homography[2, 2]
+        homographies.append(homography)
+
+    return homographies
+
+
+def _optimize_func(_homographies_params, match_groups):
+    num_homographies = len(_homographies_params) // 9
+    homographies = []
+    for idx in range(num_homographies):
+        homography = np.array(_homographies_params[idx * 9 : idx * 9 + 9]).reshape(3, 3)
+        homography /= homography[2, 2]
+        homographies.append(homography)
+
+    all_diffs = []
+    for match_group in match_groups:
+        query_idx = match_group.query_idx
+        ref_idx = match_group.ref_idx
+
+        if ref_idx == 0:
+            H_query_to_ref = homographies[query_idx - 1]
+            H_ref_to_query = np.linalg.inv(H_query_to_ref)
+        else:
+            H_query_to_ref = np.linalg.inv(homographies[ref_idx - 1]).dot(
+                homographies[query_idx - 1]
+            )
+            H_ref_to_query = np.linalg.inv(homographies[query_idx - 1]).dot(
+                homographies[ref_idx - 1]
+            )
+
+        H_query_to_ref /= H_query_to_ref[2, 2]
+        H_ref_to_query /= H_ref_to_query[2, 2]
+
+        transformed_query_pts = cv2.perspectiveTransform(
+            np.float64([kpt.pt for kpt in match_group.query_kpts])[None, ...],
+            H_query_to_ref,
+        ).squeeze(0)
+        diff0 = transformed_query_pts - np.float64(
+            [kpt.pt for kpt in match_group.ref_kpts]
+        )
+
+        transformed_ref_pts = cv2.perspectiveTransform(
+            np.float64([kpt.pt for kpt in match_group.ref_kpts])[None, ...],
+            H_ref_to_query,
+        ).squeeze(0)
+        diff1 = transformed_ref_pts - np.float64(
+            [kpt.pt for kpt in match_group.query_kpts]
+        )
+        all_diffs.append(diff0)
+        all_diffs.append(diff1)
+
+    all_diff = np.concatenate(all_diffs, axis=0)
+
+    return all_diff.transpose(1, 0).ravel()
 
 
 if __name__ == "__main__":
