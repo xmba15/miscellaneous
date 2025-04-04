@@ -44,13 +44,15 @@ def main():
     query_gray = cv2.cvtColor(query_image, cv2.COLOR_BGR2GRAY)
     ref_gray = cv2.cvtColor(ref_image, cv2.COLOR_BGR2GRAY)
 
-    flow = cv2.optflow.calcOpticalFlowDenseRLOF(query_image, ref_image, None)
+    flow = cv2.optflow.calcOpticalFlowDenseRLOF(ref_image, query_image, None)
 
     grid = flow_to_grid(flow)
 
     query_tensor = (
-        torch.tensor(query_image, dtype=torch.float32).permute(2, 0, 1).unsqueeze(0)
+        torch.tensor(ref_image, dtype=torch.float32).permute(2, 0, 1).unsqueeze(0)
     )
+
+    # backward warping
     warped_image = F.grid_sample(
         query_tensor, grid, mode="bilinear", align_corners=True
     )
